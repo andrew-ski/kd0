@@ -2,7 +2,13 @@ namespace SpriteKind {
     export const Timer = SpriteKind.create()
     export const Sword = SpriteKind.create()
     export const HUD = SpriteKind.create()
+    export const bear = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.bear, SpriteKind.Player, function (sprite, otherSprite) {
+    BearSprite.say("CHOMP", 500)
+    healthPercent += -10
+    pause(1000)
+})
 // 0 - up
 // 
 // 1 - right
@@ -703,38 +709,6 @@ function createTimer (ms: number) {
     timer.setFlag(SpriteFlag.Ghost, true)
     timer.lifespan = ms
 }
-function drawHUDMeter (percent: number, hudSprite: Sprite, onColor: number, offColor: number) {
-    hudSprite.image.fill(offColor)
-    fillWidth = percent * meterWidth / 100
-    hudSprite.image.fillRect(0, 0, fillWidth, hudSprite.height, onColor)
-}
-function spawnRandGrass () {
-    for (let value of tiles.getTilesByType(myTiles.tile1)) {
-        if (randint(1, 3) == 1) {
-            tiles.setTileAt(value, myTiles.tile9)
-        } else if (randint(1, 2) == 1) {
-            tiles.setTileAt(value, myTiles.tile7)
-        } else if (randint(1, 2) == 1) {
-            tiles.setTileAt(value, myTiles.tile4)
-        } else if (randint(1, 6) == 1) {
-            tiles.setTileAt(value, myTiles.tile5)
-        } else if (randint(1, 6) == 1) {
-            tiles.setTileAt(value, myTiles.tile6)
-        } else {
-            tiles.setTileAt(value, myTiles.tile8)
-        }
-    }
-}
-function initHUDSprite (hudSprite: Sprite) {
-    hudSprite.z = 200
-    hudSprite.setFlag(SpriteFlag.RelativeToCamera, true)
-    hudSprite.setImage(image.create(meterWidth, 6))
-    hudSprite.left = 24
-}
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    lastDirection = 1
-    walk()
-})
 function Level1 () {
     scene.setBackgroundColor(7)
     tiles.setTilemap(tiles.createTilemap(hex`200020000a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a030303030303030303030303030303030303030501010101010101010101010b0c0101070101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010701010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010701010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101070101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101070401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010107010b0c0101010101010101070101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010107010101010101010101010101010407010101010101010101010b0c0101010803030303030303030303030303030901010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101070b0c0101010401010101010101010101010101010101010101010101010101010b0c010e010401010101010101010101010101010101010101010101010101010b0c0b0d0c0401010701010101010101010101010701010101010101010101020b0c010a0106030303030303030303030303030303030303030303030303030303`, img`
@@ -776,14 +750,74 @@ function Level1 () {
     spawnPocky()
     tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 1))
 }
+function drawHUDMeter (percent: number, hudSprite: Sprite, onColor: number, offColor: number) {
+    hudSprite.image.fill(offColor)
+    fillWidth = percent * meterWidth / 100
+    hudSprite.image.fillRect(0, 0, fillWidth, hudSprite.height, onColor)
+}
+function spawnRandGrass () {
+    for (let value2 of tiles.getTilesByType(myTiles.tile1)) {
+        if (randint(1, 3) == 1) {
+            tiles.setTileAt(value2, myTiles.tile9)
+        } else if (randint(1, 2) == 1) {
+            tiles.setTileAt(value2, myTiles.tile7)
+        } else if (randint(1, 2) == 1) {
+            tiles.setTileAt(value2, myTiles.tile4)
+        } else if (randint(1, 6) == 1) {
+            tiles.setTileAt(value2, myTiles.tile5)
+        } else if (randint(1, 6) == 1) {
+            tiles.setTileAt(value2, myTiles.tile6)
+        } else {
+            tiles.setTileAt(value2, myTiles.tile8)
+        }
+    }
+}
+function initHUDSprite (hudSprite: Sprite) {
+    hudSprite.z = 200
+    hudSprite.setFlag(SpriteFlag.RelativeToCamera, true)
+    hudSprite.setImage(image.create(meterWidth, 6))
+    hudSprite.left = 24
+}
+controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+    lastDirection = 1
+    walk()
+})
+sprites.onOverlap(SpriteKind.bear, SpriteKind.Sword, function (sprite, otherSprite) {
+    if (BearHealth > 1) {
+        BearHealth += -1
+    } else if (BearHealth == 1) {
+        BearSprite.destroy()
+        bearIs = 0
+        bearSteak = sprites.create(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . f f f f f f f . . . . . 
+            . . f f 3 3 3 3 3 3 f f f . . . 
+            . . f 3 3 2 2 2 2 3 3 3 f f . . 
+            . f f 3 2 2 2 2 2 2 2 3 3 f . . 
+            f f 3 3 2 2 1 1 2 2 2 2 3 f f . 
+            f 3 3 2 2 1 1 1 1 1 1 2 3 3 3 f 
+            f 3 3 2 2 1 1 d d d 1 2 2 3 3 f 
+            . f 3 3 2 2 2 2 2 d 2 2 2 3 3 f 
+            . f f 3 3 2 2 2 2 2 2 3 3 3 f . 
+            . . f f 3 3 3 3 3 3 3 3 f f . . 
+            . . . f f f f f f f f f . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, SpriteKind.Food)
+        bearSteak.setPosition(Kiddo.x + 0, Kiddo.y + 0)
+    }
+    pause(1000)
+})
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     lastDirection = 2
     walk()
 })
 scene.onHitWall(SpriteKind.Sword, function (sprite, location) {
     if (controller.A.isPressed()) {
-        for (let value of [CollisionDirection.Left, CollisionDirection.Right, CollisionDirection.Top, CollisionDirection.Bottom]) {
-            if (tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(Trekking_Pole), value), myTiles.tile17)) {
+        for (let value3 of [CollisionDirection.Left, CollisionDirection.Right, CollisionDirection.Top, CollisionDirection.Bottom]) {
+            if (tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(Trekking_Pole), value3), myTiles.tile17)) {
                 tiles.setWallAt(location, false)
                 Berries = sprites.create(img`
                     . . . . . . . . . f . . . . . . 
@@ -805,6 +839,9 @@ scene.onHitWall(SpriteKind.Sword, function (sprite, location) {
                     `, SpriteKind.Food)
                 tiles.placeOnTile(Berries, location)
                 tiles.setTileAt(location, myTiles.tile7)
+                if (randint(0, 4) == 0) {
+                    spawnBear()
+                }
             }
         }
     }
@@ -813,9 +850,211 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     hungerPercent += 10
     if (hungerPercent > 100) {
         hungerPercent = 100
+        healthPercent += 20
     }
-    otherSprite.destroy(effects.disintegrate, 500)
+    otherSprite.destroy(effects.disintegrate, 200)
+    pause(200)
 })
+function spawnBear () {
+    BearSprite = sprites.create(img`
+        .....fff...ff...................
+        ....ffff..ffff..................
+        ....ffffffffff..fffffffff.......
+        ..ffffffffffffffffffffffffff....
+        ..ff1fff1ffffffffffffffffffff...
+        ffddddffffffffffffffffffffffff..
+        fdddddffffffffffffffffffffffffff
+        .dddddffffffffffffffffffffffffff
+        .dddddffffffffffffffffffffffffff
+        ..dddffffffffffffffffffffffffff.
+        ....fffffffffffffffffffffffffff.
+        .....cfffffffffcfffffffffffffff.
+        .....cfffffffffcffffffffffcffff.
+        .....cffffffffccfffffffffccffff.
+        .....bbffffffcccfffffffcccbffff.
+        .....bbbffffbcccccccccccbbbffff.
+        .....bbbbbbbbcccccbbbbbbbffffff.
+        .....bbbbb...ccccc..bbbbffffff..
+        .....bbbbb...ccccc..bbbbffffff..
+        .....bbbbb...ccccc..bbbbbfffff..
+        .....bbbbb...cccc...bbbbbfffff..
+        .....bbbb....cccc..bbbbbbffff...
+        ....bbbb....ccccc..bbbbbfffff...
+        ................................
+        `, SpriteKind.bear)
+    BearSprite.setPosition(Kiddo.x + 50, Kiddo.y + 50)
+    BearSprite.follow(Kiddo, 55)
+    BearHealth = 3
+    bearIs = 1
+}
+function bearAnimate () {
+    BearSprite.setImage(BearSprite.image)
+    if (BearSprite.vx > 0 && BearSprite.x < Kiddo.x) {
+        animation.runImageAnimation(
+        BearSprite,
+        [img`
+            ...................ff...fff.....
+            ..................ffff..ffff....
+            .......fffffffff..ffffffffff....
+            ....ffffffffffffffffffffffffff..
+            ...ffffffffffffffffffff1fff1ff..
+            ..ffffffffffffffffffffffffddddff
+            ffffffffffffffffffffffffffdddddf
+            ffffffffffffffffffffffffffddddd.
+            ffffffffffffffffffffffffffddddd.
+            .ffffffffffffffffffffffffffddd..
+            .fffffffffffffffffffffffffff....
+            .fffffffffffffffcfffffffffc.....
+            .ffffcffffffffffcfffffffffc.....
+            .ffffccfffffffffccffffffffc.....
+            .ffffbcccfffffffcccffffffbb.....
+            .ffffbbbcccccccccccbffffbbb.....
+            .ffffffbbbbbbbcccccbbbbbbbb.....
+            ..ffffffbbbb..ccccc...bbbbb.....
+            ..ffffffbbbb..ccccc...bbbbb.....
+            ..fffffbbbbb..ccccc...bbbbb.....
+            ..fffffbbbbb...cccc...bbbbb.....
+            ...ffffbbbbbb..cccc....bbbb.....
+            ...fffffbbbbb..ccccc....bbbb....
+            ................................
+            `,img`
+            ...................ff...fff.....
+            ..................ffff..ffff....
+            .......fffffffff..ffffffffff....
+            ....ffffffffffffffffffffffffff..
+            ...ffffffffffffffffffff1fff1ff..
+            ..ffffffffffffffffffffffffddddff
+            ffffffffffffffffffffffffffdddddf
+            ffffffffffffffffffffffffffddddd.
+            ffffffffffffffffffffffffffddddd.
+            .ffffffffffffffffffffffffffddd..
+            .fffffffffffffffffffffffffff....
+            .fffffffffffffffcfffffffffc.....
+            .ffffcffffffffffcfffffffffc.....
+            .ffffccfffffffffccffffffffc.....
+            .ffffbcccfffffffcccffffffbb.....
+            .ffffbbbcccccccccccbffffbbb.....
+            .ffffffbbbbbbbcccccbbbbbbbb.....
+            ..ffffffbb....ccccc...bbbbb.....
+            ..ffffffb.....ccccc...bbbbb.....
+            ..fffffbb.....ccccc...bbbbb.....
+            ..ffffffb......cccc...bbbbb.....
+            ...fffffbb.....cccc....bbbb.....
+            ...ffffffbb....ccccc....bbbb....
+            ................................
+            `,img`
+            ...................ff...fff.....
+            ..................ffff..ffff....
+            .......fffffffff..ffffffffff....
+            ....ffffffffffffffffffffffffff..
+            ...ffffffffffffffffffff1fff1ff..
+            ..ffffffffffffffffffffffffddddff
+            ffffffffffffffffffffffffffdddddf
+            ffffffffffffffffffffffffffddddd.
+            ffffffffffffffffffffffffffddddd.
+            .ffffffffffffffffffffffffffddd..
+            .fffffffffffffffffffffffffff....
+            .fffffffffffffffcfffffffffc.....
+            .ffffcffffffffffcfffffffffc.....
+            .ffffccfffffffffccffffffffc.....
+            .ffffbcccfffffffcccffffffbb.....
+            .ffffbbbcccccccccccbffffbbb.....
+            .ffffffbbbbbbbcccccbbbbbbbbb....
+            ..fffffff.....ccccc...bbbbbb....
+            ..fffffff....ccccc.....bbbbb....
+            ...bfffff....ccccc......bbbb....
+            ...bbffff.....cccc.......bbbb...
+            .....fffff....cccc..............
+            ..............ccccc.............
+            ................................
+            `],
+        200,
+        true
+        )
+    } else {
+        animation.runImageAnimation(
+        BearSprite,
+        [img`
+            .....fff...ff...................
+            ....ffff..ffff..................
+            ....ffffffffff..fffffffff.......
+            ..ffffffffffffffffffffffffff....
+            ..ff1fff1ffffffffffffffffffff...
+            ffddddffffffffffffffffffffffff..
+            fdddddffffffffffffffffffffffffff
+            .dddddffffffffffffffffffffffffff
+            .dddddffffffffffffffffffffffffff
+            ..dddffffffffffffffffffffffffff.
+            ....fffffffffffffffffffffffffff.
+            .....cfffffffffcfffffffffffffff.
+            .....cfffffffffcffffffffffcffff.
+            .....cffffffffccfffffffffccffff.
+            .....bbffffffcccfffffffcccbffff.
+            .....bbbffffbcccccccccccbbbffff.
+            ......bbbbbbbcccccbbbbbbbffffff.
+            .......bbbccccc...bbbbbbbfffff..
+            .......bbbccccc...bbbbb..ffffff.
+            .......bbbccccc...bbbbb...fffff.
+            .......bbbcccc....bbbbb...fffff.
+            .......bbccccc...bbbbb....ffff..
+            ......bbbb...............fffff..
+            ................................
+            `,img`
+            .....fff...ff...................
+            ....ffff..ffff..................
+            ....ffffffffff..fffffffff.......
+            ..ffffffffffffffffffffffffff....
+            ..ff1fff1ffffffffffffffffffff...
+            ffddddffffffffffffffffffffffff..
+            fdddddffffffffffffffffffffffffff
+            .dddddffffffffffffffffffffffffff
+            .dddddffffffffffffffffffffffffff
+            ..dddffffffffffffffffffffffffff.
+            ....fffffffffffffffffffffffffff.
+            .....cfffffffffcfffffffffffffff.
+            .....cfffffffffcffffffffffcffff.
+            .....cffffffffccfffffffffccffff.
+            .....bbffffffcccfffffffcccbffff.
+            .....bbbffffbcccccccccccbbbffff.
+            .....bbbbbbbbcccccbbbbbbbffffff.
+            .....bbbbb...ccccc....bbffffff..
+            .....bbbbb...ccccc.....bffffff..
+            .....bbbbb...ccccc.....bbfffff..
+            .....bbbbb...cccc......bffffff..
+            .....bbbb....cccc.....bbfffff...
+            ....bbbb....ccccc....bbffffff...
+            ................................
+            `,img`
+            .....fff...ff...................
+            ....ffff..ffff..................
+            ....ffffffffff..fffffffff.......
+            ..ffffffffffffffffffffffffff....
+            ..ff1fff1ffffffffffffffffffff...
+            ffddddffffffffffffffffffffffff..
+            fdddddffffffffffffffffffffffffff
+            .dddddffffffffffffffffffffffffff
+            .dddddffffffffffffffffffffffffff
+            ..dddffffffffffffffffffffffffff.
+            ....fffffffffffffffffffffffffff.
+            .....cfffffffffcfffffffffffffff.
+            .....cfffffffffcffffffffffcffff.
+            .....cffffffffccfffffffffccffff.
+            .....bbffffffcccfffffffcccbffff.
+            .....bbbffffbcccccccccccbbbffff.
+            ....bbbbbbbbbcccccbbbbbbbffffff.
+            ....bbbbbb...ccccc.....fffffff..
+            ....bbbbb.....ccccc....fffffff..
+            ....bbbb......ccccc....fffffb...
+            ...bbbb.......cccc.....ffffbb...
+            ..............cccc....fffff.....
+            .............ccccc..............
+            ................................
+            `],
+        200,
+        true
+        )
+    }
+}
 sprites.onDestroyed(SpriteKind.Timer, function (sprite) {
     animation.stopAnimation(animation.AnimationTypes.All, Kiddo)
     walk()
@@ -862,11 +1101,13 @@ function spawnKiddo () {
 }
 let moving = false
 let Berries: Sprite = null
+let bearSteak: Sprite = null
+let bearIs = 0
+let BearHealth = 0
 let fillWidth = 0
 let timer: Sprite = null
 let Kiddo: Sprite = null
 let Trekking_Pole: Sprite = null
-let healthPercent = 0
 let hungerPercent = 0
 let meterWidth = 0
 let hungerTitle: Sprite = null
@@ -874,14 +1115,10 @@ let healthBar: Sprite = null
 let hungerBar: Sprite = null
 let Pocky: Sprite = null
 let lastDirection = 0
+let healthPercent = 0
+let BearSprite: Sprite = null
 Level1()
 spawnHUD()
-game.onUpdate(function () {
-    moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
-    if (!(moving)) {
-        animation.stopAnimation(animation.AnimationTypes.All, Kiddo)
-    }
-})
 game.onUpdate(function () {
     if (lastDirection == 0) {
         Trekking_Pole.bottom = Kiddo.top
@@ -902,13 +1139,29 @@ game.onUpdate(function () {
         Kiddo.say("I literally didn't eat anything today", 2000)
     } else if (hungerPercent == 15) {
         Kiddo.say("I'M DYING...", 1000)
-    } else if (hungerPercent == 0) {
+    }
+    if (healthPercent == 50) {
+        Kiddo.say("I'm bleeding!", 1000)
+    } else if (healthPercent == 25) {
+        Kiddo.say("Tell the cats I love them!", 1000)
+    } else if (healthPercent == 0) {
         game.over(false, effects.melt)
     }
 })
+game.onUpdate(function () {
+    moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
+    if (!(moving)) {
+        animation.stopAnimation(animation.AnimationTypes.All, Kiddo)
+    }
+})
 game.onUpdateInterval(500, function () {
-    hungerPercent += -0.5
-    healthPercent += -0.5
+    hungerPercent += -0.75
     drawHUDMeter(hungerPercent, hungerBar, 4, 14)
-    drawHUDMeter(healthPercent, healthBar, 2, 3)
+    drawHUDMeter(healthPercent, healthBar, 3, 2)
+    if (bearIs == 1) {
+        bearAnimate()
+    }
+    if (hungerPercent <= 0) {
+        healthPercent += -5
+    }
 })

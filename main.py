@@ -3,6 +3,7 @@ class SpriteKind:
     Timer = SpriteKind.create()
     Sword = SpriteKind.create()
     HUD = SpriteKind.create()
+    bear = SpriteKind.create()
 # 0 - up
 # 
 # 1 - right
@@ -17,9 +18,103 @@ def on_up_pressed():
     walk()
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
+def spawnPocky():
+    global Pocky
+    Pocky = sprites.create(img("""
+            f f f f f f f f f 
+                    2 2 2 2 2 2 2 2 2 
+                    2 2 2 2 2 2 2 2 2 
+                    2 4 4 2 4 2 2 4 2 
+                    2 4 4 2 4 2 2 4 2 
+                    2 f f 2 f 2 2 f 2 
+                    2 f 1 1 f 2 f f 2 
+                    2 2 1 f 1 1 f f 2 
+                    2 2 1 f f f 1 2 2 
+                    2 2 1 f f 1 1 2 2 
+                    2 2 1 1 1 f 2 2 2 
+                    2 2 1 f f f 2 2 2 
+                    2 2 1 f f f 2 2 2 
+                    2 2 1 f f f f 2 2 
+                    2 f f 2 f f f 2 2 
+                    f f 2 2 f 2 f f 2
+        """),
+        SpriteKind.food)
+    for value in tiles.get_tiles_by_type(myTiles.tile3):
+        tiles.place_on_tile(Pocky, value)
+def initHUDtitle(hudSprite: Sprite):
+    hudSprite.z = 200
+    hudSprite.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
+    hudSprite.left = 0
+def spawnHUD():
+    global hungerBar, healthBar, hungerTitle, meterWidth, hungerPercent, healthPercent
+    hungerBar = sprites.create(img("""
+            . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . .
+        """),
+        SpriteKind.HUD)
+    healthBar = sprites.create(img("""
+            . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . .
+        """),
+        SpriteKind.HUD)
+    hungerTitle = sprites.create(img("""
+            bbbbbbbbbbbbbbbbbbbbbbc
+                    b111ff1fff1ff11ffffffbc
+                    b1fff1f1f1f1f1f1fffffbc
+                    b1fff1f1f1f1f1f1fffffbc
+                    b111f1f1f1f1f1f1fffffbc
+                    b1fff1f1f1f1f1f1fffffbc
+                    b1ffff1fff1ff11ffffffbc
+                    bffffffffffffffffffffbc
+                    b1f1f11ff1ff1f111f1f1bc
+                    b1f1f1ff1f1f1ff1ff1f1bc
+                    b111f11f111f1ff1ff111bc
+                    b1f1f1ff1f1f1ff1ff1f1bc
+                    b1f1f11f1f1f11f1ff1f1bc
+                    bbbbbbbbbbbbbbbbbbbbbbc
+        """),
+        SpriteKind.HUD)
+    hungerTitle.top = scene.screen_height() - 16
+    hungerBar.top = scene.screen_height() - 16
+    healthBar.top = scene.screen_height() - 8
+    meterWidth = scene.screen_width() - 140
+    initHUDSprite(hungerBar)
+    initHUDSprite(healthBar)
+    initHUDtitle(hungerTitle)
+    hungerPercent = 100
+    healthPercent = 100
+
 def on_a_pressed():
     if lastDirection == 0:
-        animation.run_image_animation(sword,
+        animation.run_image_animation(Trekking_Pole,
             [img("""
                     . . . . . . . . . . . . . . . 
                                 . . . . . . . . . . . . . . . 
@@ -95,7 +190,7 @@ def on_a_pressed():
             100,
             False)
     elif lastDirection == 1:
-        animation.run_image_animation(sword,
+        animation.run_image_animation(Trekking_Pole,
             [img("""
                     . . . . . . . . b . . . . . . 
                                 . . . . . . . f . . . . . . . 
@@ -171,7 +266,7 @@ def on_a_pressed():
             100,
             False)
     elif lastDirection == 2:
-        animation.run_image_animation(sword,
+        animation.run_image_animation(Trekking_Pole,
             [img("""
                     . . . . . . . . . . . . . . . 
                                 . . . . . . . . . . . . . . . 
@@ -247,7 +342,7 @@ def on_a_pressed():
             100,
             False)
     else:
-        animation.run_image_animation(sword,
+        animation.run_image_animation(Trekking_Pole,
             [img("""
                     . . . . . . . . . . . . . . . 
                                 . . . b . . . . . . . . . . . 
@@ -623,16 +718,90 @@ def createTimer(ms: number):
         SpriteKind.Timer)
     timer.set_flag(SpriteFlag.GHOST, True)
     timer.lifespan = ms
+def Level1():
+    scene.set_background_color(7)
+    tiles.set_tilemap(tiles.create_tilemap(hex("""
+                200020000a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a030303030303030303030303030303030303030501010101010101010101010b0c0101070101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010701010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010701010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101070101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101070401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010107010b0c0101010101010101070101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010107010101010101010101010101010407010101010101010101010b0c0101010803030303030303030303030303030901010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101070b0c0101010401010101010101010101010101010101010101010101010101010b0c010e010401010101010101010101010101010101010101010101010101010b0c0b0d0c0401010701010101010101010101010701010101010101010101020b0c010a0106030303030303030303030303030303030303030303030303030303
+            """),
+            img("""
+                22222222222222222222222222222222
+                        ...............................2
+                        2..2...........................2
+                        2...........................2..2
+                        2..............................2
+                        2..............................2
+                        2..............................2
+                        2..............................2
+                        2.........2....................2
+                        2..............................2
+                        2..2...........................2
+                        2..............................2
+                        2..............................2
+                        2.................2............2
+                        2............................2.2
+                        2........2.....................2
+                        2..............................2
+                        2..............................2
+                        2..............................2
+                        2..............................2
+                        2..............................2
+                        2....2..............2..........2
+                        2..............................2
+                        2..............................2
+                        2..............................2
+                        2..............................2
+                        2..............................2
+                        2.............................22
+                        2..............................2
+                        2.2............................2
+                        2222...2...........2...........2
+                        2.2.............................
+            """),
+            [myTiles.transparency16,
+                myTiles.tile1,
+                myTiles.tile3,
+                myTiles.tile10,
+                myTiles.tile11,
+                myTiles.tile12,
+                myTiles.tile13,
+                myTiles.tile17,
+                myTiles.tile18,
+                myTiles.tile19,
+                myTiles.tile20,
+                myTiles.tile21,
+                myTiles.tile22,
+                myTiles.tile23,
+                myTiles.tile24],
+            TileScale.SIXTEEN))
+    spawnRandGrass()
+    spawnKiddo()
+    spawnBear()
+    spawnPocky()
+    tiles.place_on_tile(Kiddo, tiles.get_tile_location(0, 1))
 def drawHUDMeter(percent: number, hudSprite: Sprite, onColor: number, offColor: number):
     global fillWidth
     hudSprite.image.fill(offColor)
     fillWidth = percent * meterWidth / 100
     hudSprite.image.fill_rect(0, 0, fillWidth, hudSprite.height, onColor)
+def spawnRandGrass():
+    for value2 in tiles.get_tiles_by_type(myTiles.tile1):
+        if randint(1, 3) == 1:
+            tiles.set_tile_at(value2, myTiles.tile9)
+        elif randint(1, 2) == 1:
+            tiles.set_tile_at(value2, myTiles.tile7)
+        elif randint(1, 2) == 1:
+            tiles.set_tile_at(value2, myTiles.tile4)
+        elif randint(1, 6) == 1:
+            tiles.set_tile_at(value2, myTiles.tile5)
+        elif randint(1, 6) == 1:
+            tiles.set_tile_at(value2, myTiles.tile6)
+        else:
+            tiles.set_tile_at(value2, myTiles.tile8)
 def initHUDSprite(hudSprite: Sprite):
     hudSprite.z = 200
     hudSprite.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
-    hudSprite.set_image(image.create(meterWidth, 4))
-    hudSprite.left = 10
+    hudSprite.set_image(image.create(meterWidth, 6))
+    hudSprite.left = 24
 
 def on_right_pressed():
     global lastDirection
@@ -646,6 +815,39 @@ def on_down_pressed():
     walk()
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
+def on_hit_wall(sprite, location):
+    global Berries
+    if controller.A.is_pressed():
+        for value3 in [CollisionDirection.LEFT,
+            CollisionDirection.RIGHT,
+            CollisionDirection.TOP,
+            CollisionDirection.BOTTOM]:
+            if tiles.tile_is(tiles.location_in_direction(tiles.location_of_sprite(Trekking_Pole), value3),
+                myTiles.tile17):
+                tiles.set_wall_at(location, False)
+                Berries = sprites.create(img("""
+                        . . . . . . . . . f . . . . . . 
+                                            . . . . . f f . f 7 f . f . . . 
+                                            . . . f f 8 8 f f 7 f f 7 f . . 
+                                            . . . f 8 8 8 a f 7 f 7 f . . . 
+                                            . . f f 8 8 8 a f 7 7 f . . . . 
+                                            . f 8 8 f 8 a a f f f . . . . . 
+                                            f 8 8 8 8 f f f 8 8 f f . . . . 
+                                            f 8 8 8 a f 8 8 8 8 8 f . . . . 
+                                            f 8 8 8 a f f 8 8 8 a f . . . . 
+                                            . f a a f . . f a a f . . . . . 
+                                            . . f f . . . . f f . . . . . . 
+                                            . . . . . . . . . . . . . . . . 
+                                            . . . . . . . . . . . . . . . . 
+                                            . . . . . . . . . . . . . . . . 
+                                            . . . . . . . . . . . . . . . . 
+                                            . . . . . . . . . . . . . . . .
+                    """),
+                    SpriteKind.food)
+                tiles.place_on_tile(Berries, location)
+                tiles.set_tile_at(location, myTiles.tile7)
+scene.on_hit_wall(SpriteKind.Sword, on_hit_wall)
+
 def on_on_overlap(sprite, otherSprite):
     global hungerPercent
     hungerPercent += 10
@@ -654,140 +856,277 @@ def on_on_overlap(sprite, otherSprite):
     otherSprite.destroy(effects.disintegrate, 500)
 sprites.on_overlap(SpriteKind.player, SpriteKind.food, on_on_overlap)
 
+def spawnBear():
+    global BearSprite
+    BearSprite = sprites.create(img("""
+            .....fff...ff...................
+                    ....ffff..ffff..................
+                    ....ffffffffff..fffffffff.......
+                    ..ffffffffffffffffffffffffff....
+                    ..ff1fff1ffffffffffffffffffff...
+                    ffddddffffffffffffffffffffffff..
+                    fdddddffffffffffffffffffffffffff
+                    .dddddffffffffffffffffffffffffff
+                    .dddddffffffffffffffffffffffffff
+                    ..dddffffffffffffffffffffffffff.
+                    ....fffffffffffffffffffffffffff.
+                    .....cfffffffffcfffffffffffffff.
+                    .....cfffffffffcffffffffffcffff.
+                    .....cffffffffccfffffffffccffff.
+                    .....bbffffffcccfffffffcccbffff.
+                    .....bbbffffbcccccccccccbbbffff.
+                    .....bbbbbbbbcccccbbbbbbbffffff.
+                    .....bbbbb...ccccc..bbbbffffff..
+                    .....bbbbb...ccccc..bbbbffffff..
+                    .....bbbbb...ccccc..bbbbbfffff..
+                    .....bbbbb...cccc...bbbbbfffff..
+                    .....bbbb....cccc..bbbbbbffff...
+                    ....bbbb....ccccc..bbbbbfffff...
+                    ................................
+        """),
+        SpriteKind.bear)
+    animation.run_image_animation(BearSprite,
+        [img("""
+                .....fff...ff...................
+                        ....ffff..ffff..................
+                        ....ffffffffff..fffffffff.......
+                        ..ffffffffffffffffffffffffff....
+                        ..ff1fff1ffffffffffffffffffff...
+                        ffddddffffffffffffffffffffffff..
+                        fdddddffffffffffffffffffffffffff
+                        .dddddffffffffffffffffffffffffff
+                        .dddddffffffffffffffffffffffffff
+                        ..dddffffffffffffffffffffffffff.
+                        ....fffffffffffffffffffffffffff.
+                        .....cfffffffffcfffffffffffffff.
+                        .....cfffffffffcffffffffffcffff.
+                        .....cffffffffccfffffffffccffff.
+                        .....bbffffffcccfffffffcccbffff.
+                        .....bbbffffbcccccccccccbbbffff.
+                        ......bbbbbbbcccccbbbbbbbffffff.
+                        .......bbbccccc...bbbbbbbfffff..
+                        .......bbbccccc...bbbbb..ffffff.
+                        .......bbbccccc...bbbbb...fffff.
+                        .......bbbcccc....bbbbb...fffff.
+                        .......bbccccc...bbbbb....ffff..
+                        ......bbbb...............fffff..
+                        ................................
+            """),
+            img("""
+                .....fff...ff...................
+                        ....ffff..ffff..................
+                        ....ffffffffff..fffffffff.......
+                        ..ffffffffffffffffffffffffff....
+                        ..ff1fff1ffffffffffffffffffff...
+                        ffddddffffffffffffffffffffffff..
+                        fdddddffffffffffffffffffffffffff
+                        .dddddffffffffffffffffffffffffff
+                        .dddddffffffffffffffffffffffffff
+                        ..dddffffffffffffffffffffffffff.
+                        ....fffffffffffffffffffffffffff.
+                        .....cfffffffffcfffffffffffffff.
+                        .....cfffffffffcffffffffffcffff.
+                        .....cffffffffccfffffffffccffff.
+                        .....bbffffffcccfffffffcccbffff.
+                        .....bbbffffbcccccccccccbbbffff.
+                        .....bbbbbbbbcccccbbbbbbbffffff.
+                        .....bbbbb...ccccc....bbffffff..
+                        .....bbbbb...ccccc.....bffffff..
+                        .....bbbbb...ccccc.....bbfffff..
+                        .....bbbbb...cccc......bffffff..
+                        .....bbbb....cccc.....bbfffff...
+                        ....bbbb....ccccc....bbffffff...
+                        ................................
+            """),
+            img("""
+                .....fff...ff...................
+                        ....ffff..ffff..................
+                        ....ffffffffff..fffffffff.......
+                        ..ffffffffffffffffffffffffff....
+                        ..ff1fff1ffffffffffffffffffff...
+                        ffddddffffffffffffffffffffffff..
+                        fdddddffffffffffffffffffffffffff
+                        .dddddffffffffffffffffffffffffff
+                        .dddddffffffffffffffffffffffffff
+                        ..dddffffffffffffffffffffffffff.
+                        ....fffffffffffffffffffffffffff.
+                        .....cfffffffffcfffffffffffffff.
+                        .....cfffffffffcffffffffffcffff.
+                        .....cffffffffccfffffffffccffff.
+                        .....bbffffffcccfffffffcccbffff.
+                        .....bbbffffbcccccccccccbbbffff.
+                        ....bbbbbbbbbcccccbbbbbbbffffff.
+                        ....bbbbbb...ccccc.....fffffff..
+                        ....bbbbb.....ccccc....fffffff..
+                        ....bbbb......ccccc....fffffb...
+                        ...bbbb.......cccc.....ffffbb...
+                        ..............cccc....fffff.....
+                        .............ccccc..............
+                        ................................
+            """)],
+        200,
+        True)
+    BearSprite.follow(Kiddo, 25)
+    animation.run_image_animation(BearSprite,
+        [img("""
+                ...................ff...fff.....
+                        ..................ffff..ffff....
+                        .......fffffffff..ffffffffff....
+                        ....ffffffffffffffffffffffffff..
+                        ...ffffffffffffffffffff1fff1ff..
+                        ..ffffffffffffffffffffffffddddff
+                        ffffffffffffffffffffffffffdddddf
+                        ffffffffffffffffffffffffffddddd.
+                        ffffffffffffffffffffffffffddddd.
+                        .ffffffffffffffffffffffffffddd..
+                        .fffffffffffffffffffffffffff....
+                        .fffffffffffffffcfffffffffc.....
+                        .ffffcffffffffffcfffffffffc.....
+                        .ffffccfffffffffccffffffffc.....
+                        .ffffbcccfffffffcccffffffbb.....
+                        .ffffbbbcccccccccccbffffbbb.....
+                        .ffffffbbbbbbbcccccbbbbbbbb.....
+                        ..ffffffbbbb..ccccc...bbbbb.....
+                        ..ffffffbbbb..ccccc...bbbbb.....
+                        ..fffffbbbbb..ccccc...bbbbb.....
+                        ..fffffbbbbb...cccc...bbbbb.....
+                        ...ffffbbbbbb..cccc....bbbb.....
+                        ...fffffbbbbb..ccccc....bbbb....
+                        ................................
+            """),
+            img("""
+                ...................ff...fff.....
+            ..................ffff..ffff....
+            .......fffffffff..ffffffffff....
+            ....ffffffffffffffffffffffffff..
+            ...ffffffffffffffffffff1fff1ff..
+            ..ffffffffffffffffffffffffddddff
+            ffffffffffffffffffffffffffdddddf
+            ffffffffffffffffffffffffffddddd.
+            ffffffffffffffffffffffffffddddd.
+            .ffffffffffffffffffffffffffddd..
+            .fffffffffffffffffffffffffff....
+            .fffffffffffffffcfffffffffc.....
+            .ffffcffffffffffcfffffffffc.....
+            .ffffccfffffffffccffffffffc.....
+            .ffffbcccfffffffcccffffffbb.....
+            .ffffbbbcccccccccccbffffbbb.....
+            .ffffffbbbbbbbcccccbbbbbbbb.....
+            ..ffffffbb....ccccc...bbbbb.....
+            ..ffffffb.....ccccc...bbbbb.....
+            ..fffffbb.....ccccc...bbbbb.....
+            ..ffffffb......cccc...bbbbb.....
+            ...fffffbb.....cccc....bbbb.....
+            ...ffffffbb....ccccc....bbbb....
+            ................................
+            """),
+            img("""
+                ...................ff...fff.....
+            ..................ffff..ffff....
+            .......fffffffff..ffffffffff....
+            ....ffffffffffffffffffffffffff..
+            ...ffffffffffffffffffff1fff1ff..
+            ..ffffffffffffffffffffffffddddff
+            ffffffffffffffffffffffffffdddddf
+            ffffffffffffffffffffffffffddddd.
+            ffffffffffffffffffffffffffddddd.
+            .ffffffffffffffffffffffffffddd..
+            .fffffffffffffffffffffffffff....
+            .fffffffffffffffcfffffffffc.....
+            .ffffcffffffffffcfffffffffc.....
+            .ffffccfffffffffccffffffffc.....
+            .ffffbcccfffffffcccffffffbb.....
+            .ffffbbbcccccccccccbffffbbb.....
+            .ffffffbbbbbbbcccccbbbbbbbbb....
+            ..fffffff.....ccccc...bbbbbb....
+            ..fffffff....ccccc.....bbbbb....
+            ...bfffff....ccccc......bbbb....
+            ...bbffff.....cccc.......bbbb...
+            .....fffff....cccc..............
+            ..............ccccc.............
+            ................................
+            """)],
+        200,
+        True)
+
 def on_on_destroyed(sprite):
     animation.stop_animation(animation.AnimationTypes.ALL, Kiddo)
     walk()
 sprites.on_destroyed(SpriteKind.Timer, on_on_destroyed)
 
-Berries: List[Image] = []
+def spawnKiddo():
+    global Kiddo, Trekking_Pole
+    Kiddo = sprites.create(img("""
+            . . . . 6 6 6 6 6 6 6 . . . . . 
+                    . . . 6 6 6 6 6 6 6 6 6 . . . . 
+                    . . . 6 6 6 e d d d 6 6 6 . . . 
+                    . . . 6 6 e f d d f d e 6 . . . 
+                    . . . 6 e e 6 d d 6 d e 6 . . . 
+                    . . . 6 e d d d d d d e 6 . . . 
+                    . . . 6 e e d d d d e e 6 . . . 
+                    . . . 6 6 e e d d e e 6 6 . . . 
+                    . . . . 6 6 9 6 6 9 6 6 . . . . 
+                    . . . . . 6 9 6 6 9 6 . . . . . 
+                    . . . . . 6 9 6 6 9 6 . . . . . 
+                    . . . . . 6 . 6 6 . 6 . . . . . 
+                    . . . . . d . 8 8 . d . . . . . 
+                    . . . . . . . 8 8 . . . . . . . 
+                    . . . . . . . 8 8 . . . . . . . 
+                    . . . . . . . 3 3 . . . . . . .
+        """),
+        SpriteKind.player)
+    controller.move_sprite(Kiddo, 50, 50)
+    Trekking_Pole = sprites.create(img("""
+            . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . .
+        """),
+        SpriteKind.Sword)
+    scene.camera_follow_sprite(Kiddo)
 moving = False
+BearSprite: Sprite = None
+Berries: Sprite = None
 fillWidth = 0
 timer: Sprite = None
-lastDirection = 0
+Kiddo: Sprite = None
+Trekking_Pole: Sprite = None
+healthPercent = 0
 hungerPercent = 0
 meterWidth = 0
-sword: Sprite = None
-Kiddo: Sprite = None
-scene.set_background_color(7)
-tiles.set_tilemap(tilemap("""
-    level
-"""))
-for value in tiles.get_tiles_by_type(myTiles.tile1):
-    if randint(1, 3) == 1:
-        tiles.set_tile_at(value, myTiles.tile9)
-    elif randint(1, 2) == 1:
-        tiles.set_tile_at(value, myTiles.tile7)
-    elif randint(1, 2) == 1:
-        tiles.set_tile_at(value, myTiles.tile4)
-    elif randint(1, 6) == 1:
-        tiles.set_tile_at(value, myTiles.tile5)
-    elif randint(1, 6) == 1:
-        tiles.set_tile_at(value, myTiles.tile6)
-    else:
-        tiles.set_tile_at(value, myTiles.tile8)
-Kiddo = sprites.create(img("""
-        . . . . 6 6 6 6 6 6 6 . . . . . 
-            . . . 6 6 6 6 6 6 6 6 6 . . . . 
-            . . . 6 6 6 e d d d 6 6 6 . . . 
-            . . . 6 6 e f d d f d e 6 . . . 
-            . . . 6 e e 6 d d 6 d e 6 . . . 
-            . . . 6 e d d d d d d e 6 . . . 
-            . . . 6 e e d d d d e e 6 . . . 
-            . . . 6 6 e e d d e e 6 6 . . . 
-            . . . . 6 6 9 6 6 9 6 6 . . . . 
-            . . . . . 6 9 6 6 9 6 . . . . . 
-            . . . . . 6 9 6 6 9 6 . . . . . 
-            . . . . . 6 . 6 6 . 6 . . . . . 
-            . . . . . d . 8 8 . d . . . . . 
-            . . . . . . . 8 8 . . . . . . . 
-            . . . . . . . 8 8 . . . . . . . 
-            . . . . . . . 3 3 . . . . . . .
-    """),
-    SpriteKind.player)
-controller.move_sprite(Kiddo, 50, 50)
-sword = sprites.create(img("""
-        . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . .
-    """),
-    SpriteKind.Sword)
-scene.camera_follow_sprite(Kiddo)
-warmthBar = sprites.create(img("""
-        . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . .
-    """),
-    SpriteKind.HUD)
-hungerBar = sprites.create(img("""
-        . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . .
-    """),
-    SpriteKind.HUD)
-hungerBar.top = scene.screen_height() - 12
-meterWidth = scene.screen_width() - 20
-initHUDSprite(hungerBar)
-hungerPercent = 100
+hungerTitle: Sprite = None
+healthBar: Sprite = None
+hungerBar: Sprite = None
+Pocky: Sprite = None
+lastDirection = 0
+Level1()
+spawnHUD()
 
 def on_on_update():
-    global moving
-    moving = controller.left.is_pressed() or (controller.right.is_pressed() or (controller.up.is_pressed() or controller.down.is_pressed()))
-    if not (moving):
-        animation.stop_animation(animation.AnimationTypes.ALL, Kiddo)
-game.on_update(on_on_update)
-
-def on_on_update2():
     if lastDirection == 0:
-        sword.bottom = Kiddo.top
-        sword.x = Kiddo.x
+        Trekking_Pole.bottom = Kiddo.top
+        Trekking_Pole.x = Kiddo.x
     elif lastDirection == 1:
-        sword.left = Kiddo.right
-        sword.y = Kiddo.y
+        Trekking_Pole.left = Kiddo.right
+        Trekking_Pole.y = Kiddo.y
     elif lastDirection == 2:
-        sword.top = Kiddo.bottom
-        sword.x = Kiddo.x
+        Trekking_Pole.top = Kiddo.bottom
+        Trekking_Pole.x = Kiddo.x
     else:
-        sword.right = Kiddo.left
-        sword.y = Kiddo.y
+        Trekking_Pole.right = Kiddo.left
+        Trekking_Pole.y = Kiddo.y
     if hungerPercent == 50:
         Kiddo.say("Can I have a snack?", 1000)
     elif hungerPercent == 30:
@@ -796,55 +1135,187 @@ def on_on_update2():
         Kiddo.say("I'M DYING...", 1000)
     elif hungerPercent == 0:
         game.over(False, effects.melt)
+game.on_update(on_on_update)
+
+def on_on_update2():
+    global moving
+    moving = controller.left.is_pressed() or (controller.right.is_pressed() or (controller.up.is_pressed() or controller.down.is_pressed()))
+    if not (moving):
+        animation.stop_animation(animation.AnimationTypes.ALL, Kiddo)
 game.on_update(on_on_update2)
 
 def on_update_interval():
-    global Berries
-    Fruit: Sprite = None
-    if randint(1, 2) == 1:
-        pass
-    Berries = [img("""
-        . . . . . . . . . f . . . . . .
-        . . . . . f f . f 7 f . f . . .
-        . . . f f 8 8 f f 7 f f 7 f . .
-        . . . f 8 8 8 a f 7 f 7 f . . .
-        . . f f 8 8 8 a f 7 7 f . . . .
-        . f 8 8 f 8 a a f f f . . . . .
-        f 8 8 8 8 f f f 8 8 f f . . . .
-        f 8 8 8 a f 8 8 8 8 8 f . . . .
-        f 8 8 8 a f f 8 8 8 a f . . . .
-        . f a a f . . f a a f . . . . .
-        . . f f . . . . f f . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-        . . . . . . . . . . . . . . . .
-    """),
-        img("""
-            . . . . . f . . . . . . . . . .
-            . . . f f 7 f f . . . . . . . .
-            . . f 7 7 7 7 7 f . . . . . . .
-            f f 2 f f 7 f f 2 f f . . . . .
-            f 2 3 2 2 f 2 4 2 4 f . . . . .
-            f 3 2 3 2 3 2 1 4 2 f . . . . .
-            f 2 3 2 3 2 4 1 2 4 f . . . . .
-            . f 2 4 2 4 2 4 2 f . . . . . .
-            . f 4 2 4 2 4 2 4 f . . . . . .
-            . f 2 4 2 4 2 4 2 f . . . . . .
-            . . f 2 4 2 4 2 f . . . . . . .
-            . . f 4 2 4 2 4 f . . . . . . .
-            . . f 2 4 2 4 2 f . . . . . . .
-            . . . f 2 4 2 f . . . . . . . .
-            . . . . f f f . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-        """)]
-
-    Fruit.lifespan = 10000
-game.on_update_interval(2000, on_update_interval)
-
-def on_update_interval2():
     global hungerPercent
     hungerPercent += -0.5
     drawHUDMeter(hungerPercent, hungerBar, 4, 14)
+    drawHUDMeter(healthPercent, healthBar, 2, 3)
+game.on_update_interval(500, on_update_interval)
+
+def on_update_interval2():
+    BearSprite.set_image(BearSprite.image)
+    if BearSprite.vx > 0 and BearSprite.x < Kiddo.x:
+        animation.run_image_animation(BearSprite,
+            [img("""
+                    .....fff...ff...................
+                                ....ffff..ffff..................
+                                ....ffffffffff..fffffffff.......
+                                ..ffffffffffffffffffffffffff....
+                                ..ff1fff1ffffffffffffffffffff...
+                                ffddddffffffffffffffffffffffff..
+                                fdddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                ..dddffffffffffffffffffffffffff.
+                                ....fffffffffffffffffffffffffff.
+                                .....cfffffffffcfffffffffffffff.
+                                .....cfffffffffcffffffffffcffff.
+                                .....cffffffffccfffffffffccffff.
+                                .....bbffffffcccfffffffcccbffff.
+                                .....bbbffffbcccccccccccbbbffff.
+                                ......bbbbbbbcccccbbbbbbbffffff.
+                                .......bbbccccc...bbbbbbbfffff..
+                                .......bbbccccc...bbbbb..ffffff.
+                                .......bbbccccc...bbbbb...fffff.
+                                .......bbbcccc....bbbbb...fffff.
+                                .......bbccccc...bbbbb....ffff..
+                                ......bbbb...............fffff..
+                                ................................
+                """),
+                img("""
+                    .....fff...ff...................
+                                ....ffff..ffff..................
+                                ....ffffffffff..fffffffff.......
+                                ..ffffffffffffffffffffffffff....
+                                ..ff1fff1ffffffffffffffffffff...
+                                ffddddffffffffffffffffffffffff..
+                                fdddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                ..dddffffffffffffffffffffffffff.
+                                ....fffffffffffffffffffffffffff.
+                                .....cfffffffffcfffffffffffffff.
+                                .....cfffffffffcffffffffffcffff.
+                                .....cffffffffccfffffffffccffff.
+                                .....bbffffffcccfffffffcccbffff.
+                                .....bbbffffbcccccccccccbbbffff.
+                                .....bbbbbbbbcccccbbbbbbbffffff.
+                                .....bbbbb...ccccc....bbffffff..
+                                .....bbbbb...ccccc.....bffffff..
+                                .....bbbbb...ccccc.....bbfffff..
+                                .....bbbbb...cccc......bffffff..
+                                .....bbbb....cccc.....bbfffff...
+                                ....bbbb....ccccc....bbffffff...
+                                ................................
+                """),
+                img("""
+                    .....fff...ff...................
+                                ....ffff..ffff..................
+                                ....ffffffffff..fffffffff.......
+                                ..ffffffffffffffffffffffffff....
+                                ..ff1fff1ffffffffffffffffffff...
+                                ffddddffffffffffffffffffffffff..
+                                fdddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                ..dddffffffffffffffffffffffffff.
+                                ....fffffffffffffffffffffffffff.
+                                .....cfffffffffcfffffffffffffff.
+                                .....cfffffffffcffffffffffcffff.
+                                .....cffffffffccfffffffffccffff.
+                                .....bbffffffcccfffffffcccbffff.
+                                .....bbbffffbcccccccccccbbbffff.
+                                ....bbbbbbbbbcccccbbbbbbbffffff.
+                                ....bbbbbb...ccccc.....fffffff..
+                                ....bbbbb.....ccccc....fffffff..
+                                ....bbbb......ccccc....fffffb...
+                                ...bbbb.......cccc.....ffffbb...
+                                ..............cccc....fffff.....
+                                .............ccccc..............
+                                ................................
+                """)],
+            200,
+            True)
+        BearSprite.image.flip_x()
+    else:
+        animation.run_image_animation(BearSprite,
+            [img("""
+                    .....fff...ff...................
+                                ....ffff..ffff..................
+                                ....ffffffffff..fffffffff.......
+                                ..ffffffffffffffffffffffffff....
+                                ..ff1fff1ffffffffffffffffffff...
+                                ffddddffffffffffffffffffffffff..
+                                fdddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                ..dddffffffffffffffffffffffffff.
+                                ....fffffffffffffffffffffffffff.
+                                .....cfffffffffcfffffffffffffff.
+                                .....cfffffffffcffffffffffcffff.
+                                .....cffffffffccfffffffffccffff.
+                                .....bbffffffcccfffffffcccbffff.
+                                .....bbbffffbcccccccccccbbbffff.
+                                ......bbbbbbbcccccbbbbbbbffffff.
+                                .......bbbccccc...bbbbbbbfffff..
+                                .......bbbccccc...bbbbb..ffffff.
+                                .......bbbccccc...bbbbb...fffff.
+                                .......bbbcccc....bbbbb...fffff.
+                                .......bbccccc...bbbbb....ffff..
+                                ......bbbb...............fffff..
+                                ................................
+                """),
+                img("""
+                    .....fff...ff...................
+                                ....ffff..ffff..................
+                                ....ffffffffff..fffffffff.......
+                                ..ffffffffffffffffffffffffff....
+                                ..ff1fff1ffffffffffffffffffff...
+                                ffddddffffffffffffffffffffffff..
+                                fdddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                ..dddffffffffffffffffffffffffff.
+                                ....fffffffffffffffffffffffffff.
+                                .....cfffffffffcfffffffffffffff.
+                                .....cfffffffffcffffffffffcffff.
+                                .....cffffffffccfffffffffccffff.
+                                .....bbffffffcccfffffffcccbffff.
+                                .....bbbffffbcccccccccccbbbffff.
+                                .....bbbbbbbbcccccbbbbbbbffffff.
+                                .....bbbbb...ccccc....bbffffff..
+                                .....bbbbb...ccccc.....bffffff..
+                                .....bbbbb...ccccc.....bbfffff..
+                                .....bbbbb...cccc......bffffff..
+                                .....bbbb....cccc.....bbfffff...
+                                ....bbbb....ccccc....bbffffff...
+                                ................................
+                """),
+                img("""
+                    .....fff...ff...................
+                                ....ffff..ffff..................
+                                ....ffffffffff..fffffffff.......
+                                ..ffffffffffffffffffffffffff....
+                                ..ff1fff1ffffffffffffffffffff...
+                                ffddddffffffffffffffffffffffff..
+                                fdddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                .dddddffffffffffffffffffffffffff
+                                ..dddffffffffffffffffffffffffff.
+                                ....fffffffffffffffffffffffffff.
+                                .....cfffffffffcfffffffffffffff.
+                                .....cfffffffffcffffffffffcffff.
+                                .....cffffffffccfffffffffccffff.
+                                .....bbffffffcccfffffffcccbffff.
+                                .....bbbffffbcccccccccccbbbffff.
+                                ....bbbbbbbbbcccccbbbbbbbffffff.
+                                ....bbbbbb...ccccc.....fffffff..
+                                ....bbbbb.....ccccc....fffffff..
+                                ....bbbb......ccccc....fffffb...
+                                ...bbbb.......cccc.....ffffbb...
+                                ..............cccc....fffff.....
+                                .............ccccc..............
+                                ................................
+                """)],
+            200,
+            True)
 game.on_update_interval(500, on_update_interval2)
