@@ -3,7 +3,8 @@
     "description": "",
     "dependencies": {
         "device": "*",
-        "animation": "*"
+        "animation": "*",
+        "tilemaps": "github:microsoft/pxt-tilemaps#v1.10.0"
     },
     "files": [
         "main.blocks",

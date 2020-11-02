@@ -21,23 +21,23 @@ def on_a_pressed():
     if lastDirection == 0:
         animation.run_image_animation(sword,
             [img("""
-                . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . .
-                b . . . . . . . . . . . . . .
-                . f . . . . . . . . . . . . .
-                . . f . . . . . . . . . . . .
-                . . f . . . . . . . . . . . .
-                . . . f . . . . . . . . . . .
-                . . . . e . . . . . . . . . .
-                . . . . e . . . . . . . . . .
-                . . . . . . . . . . . . . . .
-                . . . . . . . . . . . . . . .
-            """),
+                    . . . . . . . . . . . . . . . 
+                                . . . . . . . . . . . . . . . 
+                                . . . . . . . . . . . . . . . 
+                                . . . . . . . . . . . . . . . 
+                                . . . . . . . . . . . . . . . 
+                                . . . . . . . . . . . . . . . 
+                                . . . . . . . . . . . . . . . 
+                                b . . . . . . . . . . . . . . 
+                                . f . . . . . . . . . . . . . 
+                                . . f . . . . . . . . . . . . 
+                                . . f . . . . . . . . . . . . 
+                                . . . f . . . . . . . . . . . 
+                                . . . . e . . . . . . . . . . 
+                                . . . . e . . . . . . . . . . 
+                                . . . . . . . . . . . . . . . 
+                                . . . . . . . . . . . . . . .
+                """),
                 img("""
                     . . . . . . . . . . . . . . . 
                                 . . . . . . . b . . . . . . . 
@@ -659,7 +659,7 @@ def on_on_destroyed(sprite):
     walk()
 sprites.on_destroyed(SpriteKind.Timer, on_on_destroyed)
 
-mushroom: Sprite = None
+Berries: List[Image] = []
 moving = False
 fillWidth = 0
 timer: Sprite = None
@@ -673,30 +673,36 @@ tiles.set_tilemap(tilemap("""
     level
 """))
 for value in tiles.get_tiles_by_type(myTiles.tile1):
-    if randint(1, 2) == 1:
-        tiles.set_tile_at(value, sprites.castle.tile_grass3)
-    elif randint(1, 2) == 2:
-        tiles.set_tile_at(value, sprites.castle.tile_grass2)
+    if randint(1, 3) == 1:
+        tiles.set_tile_at(value, myTiles.tile9)
+    elif randint(1, 2) == 1:
+        tiles.set_tile_at(value, myTiles.tile7)
+    elif randint(1, 2) == 1:
+        tiles.set_tile_at(value, myTiles.tile4)
+    elif randint(1, 6) == 1:
+        tiles.set_tile_at(value, myTiles.tile5)
+    elif randint(1, 6) == 1:
+        tiles.set_tile_at(value, myTiles.tile6)
     else:
-        tiles.set_tile_at(value, sprites.castle.tile_grass1)
+        tiles.set_tile_at(value, myTiles.tile8)
 Kiddo = sprites.create(img("""
-    . . . . 6 6 6 6 6 6 6 . . . . .
-    . . . 6 6 6 6 6 6 6 6 6 . . . .
-    . . . 6 6 6 e d d d 6 6 6 . . .
-    . . . 6 6 e f d d f d e 6 . . .
-    . . . 6 e e 6 d d 6 d e 6 . . .
-    . . . 6 e d d d d d d e 6 . . .
-    . . . 6 e e d d d d e e 6 . . .
-    . . . 6 6 e e d d e e 6 6 . . .
-    . . . . 6 6 9 6 6 9 6 6 . . . .
-    . . . . . 6 9 6 6 9 6 . . . . .
-    . . . . . 6 9 6 6 9 6 . . . . .
-    . . . . . 6 . 6 6 . 6 . . . . .
-    . . . . . d . 8 8 . d . . . . .
-    . . . . . . . 8 8 . . . . . . .
-    . . . . . . . 8 8 . . . . . . .
-    . . . . . . . 3 3 . . . . . . .
-"""),
+        . . . . 6 6 6 6 6 6 6 . . . . . 
+            . . . 6 6 6 6 6 6 6 6 6 . . . . 
+            . . . 6 6 6 e d d d 6 6 6 . . . 
+            . . . 6 6 e f d d f d e 6 . . . 
+            . . . 6 e e 6 d d 6 d e 6 . . . 
+            . . . 6 e d d d d d d e 6 . . . 
+            . . . 6 e e d d d d e e 6 . . . 
+            . . . 6 6 e e d d e e 6 6 . . . 
+            . . . . 6 6 9 6 6 9 6 6 . . . . 
+            . . . . . 6 9 6 6 9 6 . . . . . 
+            . . . . . 6 9 6 6 9 6 . . . . . 
+            . . . . . 6 . 6 6 . 6 . . . . . 
+            . . . . . d . 8 8 . d . . . . . 
+            . . . . . . . 8 8 . . . . . . . 
+            . . . . . . . 8 8 . . . . . . . 
+            . . . . . . . 3 3 . . . . . . .
+    """),
     SpriteKind.player)
 controller.move_sprite(Kiddo, 50, 50)
 sword = sprites.create(img("""
@@ -782,37 +788,63 @@ def on_on_update2():
     else:
         sword.right = Kiddo.left
         sword.y = Kiddo.y
-    if hungerPercent == 0:
-        game.over(False)
+    if hungerPercent == 50:
+        Kiddo.say("Can I have a snack?", 1000)
+    elif hungerPercent == 30:
+        Kiddo.say("I literally didn't eat anything today", 2000)
+    elif hungerPercent == 15:
+        Kiddo.say("I'M DYING...", 1000)
+    elif hungerPercent == 0:
+        game.over(False, effects.melt)
 game.on_update(on_on_update2)
 
 def on_update_interval():
-    global mushroom
-    mushroom = sprites.create(img("""
-            . . . . . . . e c 7 . . . . . . 
-                    . . . . e e e c 7 7 e e . . . . 
-                    . . c e e e e c 7 e 2 2 e e . . 
-                    . c e e e e e c 6 e e 2 2 2 e . 
-                    . c e e e 2 e c c 2 4 5 4 2 e . 
-                    c e e e 2 2 2 2 2 2 4 5 5 2 2 e 
-                    c e e 2 2 2 2 2 2 2 2 4 4 2 2 e 
-                    c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-                    c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-                    c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-                    c e e 2 2 2 2 2 2 2 2 2 2 4 2 e 
-                    . e e e 2 2 2 2 2 2 2 2 2 4 e . 
-                    . 2 e e 2 2 2 2 2 2 2 2 4 2 e . 
-                    . . 2 e e 2 2 2 2 2 4 4 2 e . . 
-                    . . . 2 2 e e 4 4 4 2 e e . . . 
-                    . . . . . 2 2 e e e e . . . . .
-        """),
-        SpriteKind.food)
-    tiles.place_on_random_tile(mushroom, myTiles.tile3)
-    mushroom.lifespan = 10000
+    global Berries
+    Fruit: Sprite = None
+    if randint(1, 2) == 1:
+        pass
+    Berries = [img("""
+        . . . . . . . . . f . . . . . .
+        . . . . . f f . f 7 f . f . . .
+        . . . f f 8 8 f f 7 f f 7 f . .
+        . . . f 8 8 8 a f 7 f 7 f . . .
+        . . f f 8 8 8 a f 7 7 f . . . .
+        . f 8 8 f 8 a a f f f . . . . .
+        f 8 8 8 8 f f f 8 8 f f . . . .
+        f 8 8 8 a f 8 8 8 8 8 f . . . .
+        f 8 8 8 a f f 8 8 8 a f . . . .
+        . f a a f . . f a a f . . . . .
+        . . f f . . . . f f . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+        . . . . . . . . . . . . . . . .
+    """),
+        img("""
+            . . . . . f . . . . . . . . . .
+            . . . f f 7 f f . . . . . . . .
+            . . f 7 7 7 7 7 f . . . . . . .
+            f f 2 f f 7 f f 2 f f . . . . .
+            f 2 3 2 2 f 2 4 2 4 f . . . . .
+            f 3 2 3 2 3 2 1 4 2 f . . . . .
+            f 2 3 2 3 2 4 1 2 4 f . . . . .
+            . f 2 4 2 4 2 4 2 f . . . . . .
+            . f 4 2 4 2 4 2 4 f . . . . . .
+            . f 2 4 2 4 2 4 2 f . . . . . .
+            . . f 2 4 2 4 2 f . . . . . . .
+            . . f 4 2 4 2 4 f . . . . . . .
+            . . f 2 4 2 4 2 f . . . . . . .
+            . . . f 2 4 2 f . . . . . . . .
+            . . . . f f f . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+        """)]
+
+    Fruit.lifespan = 10000
 game.on_update_interval(2000, on_update_interval)
 
 def on_update_interval2():
     global hungerPercent
-    hungerPercent += -1
-    drawHUDMeter(hungerPercent, hungerBar, 3, 1)
+    hungerPercent += -0.5
+    drawHUDMeter(hungerPercent, hungerBar, 4, 14)
 game.on_update_interval(500, on_update_interval2)

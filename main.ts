@@ -14,10 +14,101 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     lastDirection = 0
     walk()
 })
+function spawnPocky () {
+    Pocky = sprites.create(img`
+        f f f f f f f f f 
+        2 2 2 2 2 2 2 2 2 
+        2 2 2 2 2 2 2 2 2 
+        2 4 4 2 4 2 2 4 2 
+        2 4 4 2 4 2 2 4 2 
+        2 f f 2 f 2 2 f 2 
+        2 f 1 1 f 2 f f 2 
+        2 2 1 f 1 1 f f 2 
+        2 2 1 f f f 1 2 2 
+        2 2 1 f f 1 1 2 2 
+        2 2 1 1 1 f 2 2 2 
+        2 2 1 f f f 2 2 2 
+        2 2 1 f f f 2 2 2 
+        2 2 1 f f f f 2 2 
+        2 f f 2 f f f 2 2 
+        f f 2 2 f 2 f f 2 
+        `, SpriteKind.Food)
+    for (let value of tiles.getTilesByType(myTiles.tile3)) {
+        tiles.placeOnTile(Pocky, value)
+    }
+}
+function initHUDtitle (hudSprite: Sprite) {
+    hudSprite.z = 200
+    hudSprite.setFlag(SpriteFlag.RelativeToCamera, true)
+    hudSprite.left = 0
+}
+function spawnHUD () {
+    hungerBar = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.HUD)
+    healthBar = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.HUD)
+    hungerTitle = sprites.create(img`
+        bbbbbbbbbbbbbbbbbbbbbbc
+        b111ff1fff1ff11ffffffbc
+        b1fff1f1f1f1f1f1fffffbc
+        b1fff1f1f1f1f1f1fffffbc
+        b111f1f1f1f1f1f1fffffbc
+        b1fff1f1f1f1f1f1fffffbc
+        b1ffff1fff1ff11ffffffbc
+        bffffffffffffffffffffbc
+        b1f1f11ff1ff1f111f1f1bc
+        b1f1f1ff1f1f1ff1ff1f1bc
+        b111f11f111f1ff1ff111bc
+        b1f1f1ff1f1f1ff1ff1f1bc
+        b1f1f11f1f1f11f1ff1f1bc
+        bbbbbbbbbbbbbbbbbbbbbbc
+        `, SpriteKind.HUD)
+    hungerTitle.top = scene.screenHeight() - 16
+    hungerBar.top = scene.screenHeight() - 16
+    healthBar.top = scene.screenHeight() - 8
+    meterWidth = scene.screenWidth() - 140
+    initHUDSprite(hungerBar)
+    initHUDSprite(healthBar)
+    initHUDtitle(hungerTitle)
+    hungerPercent = 100
+    healthPercent = 100
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (lastDirection == 0) {
         animation.runImageAnimation(
-        sword,
+        Trekking_Pole,
         [img`
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
@@ -92,7 +183,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         )
     } else if (lastDirection == 1) {
         animation.runImageAnimation(
-        sword,
+        Trekking_Pole,
         [img`
             . . . . . . . . b . . . . . . 
             . . . . . . . f . . . . . . . 
@@ -167,7 +258,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         )
     } else if (lastDirection == 2) {
         animation.runImageAnimation(
-        sword,
+        Trekking_Pole,
         [img`
             . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . 
@@ -242,7 +333,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         )
     } else {
         animation.runImageAnimation(
-        sword,
+        Trekking_Pole,
         [img`
             . . . . . . . . . . . . . . . 
             . . . b . . . . . . . . . . . 
@@ -617,19 +708,106 @@ function drawHUDMeter (percent: number, hudSprite: Sprite, onColor: number, offC
     fillWidth = percent * meterWidth / 100
     hudSprite.image.fillRect(0, 0, fillWidth, hudSprite.height, onColor)
 }
+function spawnRandGrass () {
+    for (let value of tiles.getTilesByType(myTiles.tile1)) {
+        if (randint(1, 3) == 1) {
+            tiles.setTileAt(value, myTiles.tile9)
+        } else if (randint(1, 2) == 1) {
+            tiles.setTileAt(value, myTiles.tile7)
+        } else if (randint(1, 2) == 1) {
+            tiles.setTileAt(value, myTiles.tile4)
+        } else if (randint(1, 6) == 1) {
+            tiles.setTileAt(value, myTiles.tile5)
+        } else if (randint(1, 6) == 1) {
+            tiles.setTileAt(value, myTiles.tile6)
+        } else {
+            tiles.setTileAt(value, myTiles.tile8)
+        }
+    }
+}
 function initHUDSprite (hudSprite: Sprite) {
     hudSprite.z = 200
     hudSprite.setFlag(SpriteFlag.RelativeToCamera, true)
-    hudSprite.setImage(image.create(meterWidth, 4))
-    hudSprite.left = 10
+    hudSprite.setImage(image.create(meterWidth, 6))
+    hudSprite.left = 24
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     lastDirection = 1
     walk()
 })
+function Level1 () {
+    scene.setBackgroundColor(7)
+    tiles.setTilemap(tiles.createTilemap(hex`200020000a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a0a030303030303030303030303030303030303030501010101010101010101010b0c0101070101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010701010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010701010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101070101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101070401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010107010b0c0101010101010101070101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010101010101010101010101010101010401010101010101010101010b0c0101010107010101010101010101010101010407010101010101010101010b0c0101010803030303030303030303030303030901010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101010b0c0101010401010101010101010101010101010101010101010101010101070b0c0101010401010101010101010101010101010101010101010101010101010b0c010e010401010101010101010101010101010101010101010101010101010b0c0b0d0c0401010701010101010101010101010701010101010101010101020b0c010a0106030303030303030303030303030303030303030303030303030303`, img`
+        22222222222222222222222222222222
+        ...............................2
+        2..2...........................2
+        2...........................2..2
+        2..............................2
+        2..............................2
+        2..............................2
+        2..............................2
+        2.........2....................2
+        2..............................2
+        2..2...........................2
+        2..............................2
+        2..............................2
+        2.................2............2
+        2............................2.2
+        2........2.....................2
+        2..............................2
+        2..............................2
+        2..............................2
+        2..............................2
+        2..............................2
+        2....2..............2..........2
+        2..............................2
+        2..............................2
+        2..............................2
+        2..............................2
+        2..............................2
+        2.............................22
+        2..............................2
+        2.2............................2
+        2222...2...........2...........2
+        2.2.............................
+        `, [myTiles.transparency16,myTiles.tile1,myTiles.tile3,myTiles.tile10,myTiles.tile11,myTiles.tile12,myTiles.tile13,myTiles.tile17,myTiles.tile18,myTiles.tile19,myTiles.tile20,myTiles.tile21,myTiles.tile22,myTiles.tile23,myTiles.tile24], TileScale.Sixteen))
+    spawnRandGrass()
+    spawnKiddo()
+    spawnPocky()
+    tiles.placeOnTile(Kiddo, tiles.getTileLocation(0, 1))
+}
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     lastDirection = 2
     walk()
+})
+scene.onHitWall(SpriteKind.Sword, function (sprite, location) {
+    if (controller.A.isPressed()) {
+        for (let value of [CollisionDirection.Left, CollisionDirection.Right, CollisionDirection.Top, CollisionDirection.Bottom]) {
+            if (tiles.tileIs(tiles.locationInDirection(tiles.locationOfSprite(Trekking_Pole), value), myTiles.tile17)) {
+                tiles.setWallAt(location, false)
+                Berries = sprites.create(img`
+                    . . . . . . . . . f . . . . . . 
+                    . . . . . f f . f 7 f . f . . . 
+                    . . . f f 8 8 f f 7 f f 7 f . . 
+                    . . . f 8 8 8 a f 7 f 7 f . . . 
+                    . . f f 8 8 8 a f 7 7 f . . . . 
+                    . f 8 8 f 8 a a f f f . . . . . 
+                    f 8 8 8 8 f f f 8 8 f f . . . . 
+                    f 8 8 8 a f 8 8 8 8 8 f . . . . 
+                    f 8 8 8 a f f 8 8 8 a f . . . . 
+                    . f a a f . . f a a f . . . . . 
+                    . . f f . . . . f f . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    . . . . . . . . . . . . . . . . 
+                    `, SpriteKind.Food)
+                tiles.placeOnTile(Berries, location)
+                tiles.setTileAt(location, myTiles.tile7)
+            }
+        }
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     hungerPercent += 10
@@ -642,104 +820,62 @@ sprites.onDestroyed(SpriteKind.Timer, function (sprite) {
     animation.stopAnimation(animation.AnimationTypes.All, Kiddo)
     walk()
 })
-let Fruit: Sprite = null
+function spawnKiddo () {
+    Kiddo = sprites.create(img`
+        . . . . 6 6 6 6 6 6 6 . . . . . 
+        . . . 6 6 6 6 6 6 6 6 6 . . . . 
+        . . . 6 6 6 e d d d 6 6 6 . . . 
+        . . . 6 6 e f d d f d e 6 . . . 
+        . . . 6 e e 6 d d 6 d e 6 . . . 
+        . . . 6 e d d d d d d e 6 . . . 
+        . . . 6 e e d d d d e e 6 . . . 
+        . . . 6 6 e e d d e e 6 6 . . . 
+        . . . . 6 6 9 6 6 9 6 6 . . . . 
+        . . . . . 6 9 6 6 9 6 . . . . . 
+        . . . . . 6 9 6 6 9 6 . . . . . 
+        . . . . . 6 . 6 6 . 6 . . . . . 
+        . . . . . d . 8 8 . d . . . . . 
+        . . . . . . . 8 8 . . . . . . . 
+        . . . . . . . 8 8 . . . . . . . 
+        . . . . . . . 3 3 . . . . . . . 
+        `, SpriteKind.Player)
+    controller.moveSprite(Kiddo, 50, 50)
+    Trekking_Pole = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, SpriteKind.Sword)
+    scene.cameraFollowSprite(Kiddo)
+}
 let moving = false
+let Berries: Sprite = null
 let fillWidth = 0
 let timer: Sprite = null
-let lastDirection = 0
+let Kiddo: Sprite = null
+let Trekking_Pole: Sprite = null
+let healthPercent = 0
 let hungerPercent = 0
 let meterWidth = 0
-let sword: Sprite = null
-let Kiddo: Sprite = null
-scene.setBackgroundColor(7)
-tiles.setTilemap(tilemap`level`)
-for (let value of tiles.getTilesByType(myTiles.tile1)) {
-    if (randint(1, 2) == 1) {
-        tiles.setTileAt(value, sprites.castle.tileGrass3)
-    } else if (randint(1, 2) == 2) {
-        tiles.setTileAt(value, sprites.castle.tileGrass2)
-    } else {
-        tiles.setTileAt(value, sprites.castle.tileGrass1)
-    }
-}
-Kiddo = sprites.create(img`
-    . . . . 6 6 6 6 6 6 6 . . . . . 
-    . . . 6 6 6 6 6 6 6 6 6 . . . . 
-    . . . 6 6 6 e d d d 6 6 6 . . . 
-    . . . 6 6 e f d d f d e 6 . . . 
-    . . . 6 e e 6 d d 6 d e 6 . . . 
-    . . . 6 e d d d d d d e 6 . . . 
-    . . . 6 e e d d d d e e 6 . . . 
-    . . . 6 6 e e d d e e 6 6 . . . 
-    . . . . 6 6 9 6 6 9 6 6 . . . . 
-    . . . . . 6 9 6 6 9 6 . . . . . 
-    . . . . . 6 9 6 6 9 6 . . . . . 
-    . . . . . 6 . 6 6 . 6 . . . . . 
-    . . . . . d . 8 8 . d . . . . . 
-    . . . . . . . 8 8 . . . . . . . 
-    . . . . . . . 8 8 . . . . . . . 
-    . . . . . . . 3 3 . . . . . . . 
-    `, SpriteKind.Player)
-controller.moveSprite(Kiddo, 50, 50)
-sword = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `, SpriteKind.Sword)
-scene.cameraFollowSprite(Kiddo)
-let warmthBar = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `, SpriteKind.HUD)
-let hungerBar = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . . . . . . . . . 
-    `, SpriteKind.HUD)
-hungerBar.top = scene.screenHeight() - 12
-meterWidth = scene.screenWidth() - 20
-initHUDSprite(hungerBar)
-hungerPercent = 100
+let hungerTitle: Sprite = null
+let healthBar: Sprite = null
+let hungerBar: Sprite = null
+let Pocky: Sprite = null
+let lastDirection = 0
+Level1()
+spawnHUD()
 game.onUpdate(function () {
     moving = controller.left.isPressed() || (controller.right.isPressed() || (controller.up.isPressed() || controller.down.isPressed()))
     if (!(moving)) {
@@ -748,51 +884,31 @@ game.onUpdate(function () {
 })
 game.onUpdate(function () {
     if (lastDirection == 0) {
-        sword.bottom = Kiddo.top
-        sword.x = Kiddo.x
+        Trekking_Pole.bottom = Kiddo.top
+        Trekking_Pole.x = Kiddo.x
     } else if (lastDirection == 1) {
-        sword.left = Kiddo.right
-        sword.y = Kiddo.y
+        Trekking_Pole.left = Kiddo.right
+        Trekking_Pole.y = Kiddo.y
     } else if (lastDirection == 2) {
-        sword.top = Kiddo.bottom
-        sword.x = Kiddo.x
+        Trekking_Pole.top = Kiddo.bottom
+        Trekking_Pole.x = Kiddo.x
     } else {
-        sword.right = Kiddo.left
-        sword.y = Kiddo.y
+        Trekking_Pole.right = Kiddo.left
+        Trekking_Pole.y = Kiddo.y
     }
     if (hungerPercent == 50) {
-        Kiddo.say("Snacks?", 1000)
+        Kiddo.say("Can I have a snack?", 1000)
     } else if (hungerPercent == 30) {
-        Kiddo.say("So hungry", 1000)
+        Kiddo.say("I literally didn't eat anything today", 2000)
     } else if (hungerPercent == 15) {
         Kiddo.say("I'M DYING...", 1000)
     } else if (hungerPercent == 0) {
         game.over(false, effects.melt)
     }
 })
-game.onUpdateInterval(2000, function () {
-    Fruit = sprites.create(img`
-        . . . . . . . e c 7 . . . . . . 
-        . . . . e e e c 7 7 e e . . . . 
-        . . c e e e e c 7 e 2 2 e e . . 
-        . c e e e e e c 6 e e 2 2 2 e . 
-        . c e e e 2 e c c 2 4 5 4 2 e . 
-        c e e e 2 2 2 2 2 2 4 5 5 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 4 4 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 2 2 2 2 e 
-        c e e 2 2 2 2 2 2 2 2 2 2 4 2 e 
-        . e e e 2 2 2 2 2 2 2 2 2 4 e . 
-        . 2 e e 2 2 2 2 2 2 2 2 4 2 e . 
-        . . 2 e e 2 2 2 2 2 4 4 2 e . . 
-        . . . 2 2 e e 4 4 4 2 e e . . . 
-        . . . . . 2 2 e e e e . . . . . 
-        `, SpriteKind.Food)
-    tiles.placeOnRandomTile(Fruit, myTiles.tile3)
-    Fruit.lifespan = 10000
-})
 game.onUpdateInterval(500, function () {
-    hungerPercent += -1
+    hungerPercent += -0.5
+    healthPercent += -0.5
     drawHUDMeter(hungerPercent, hungerBar, 4, 14)
+    drawHUDMeter(healthPercent, healthBar, 2, 3)
 })
